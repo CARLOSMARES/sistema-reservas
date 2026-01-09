@@ -3,30 +3,37 @@ package com.portafolio.reservas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La fecha y hora no pueden estar vacías")
-    @Future(message = "La cita debe ser en una fecha futura")
+    @NotNull @Future
     private LocalDateTime dateTime;
 
-    @NotBlank(message = "El nombre del cliente es obligatorio")
-    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    @NotBlank @Size(min = 3)
     private String clientName;
 
-    @Email(message = "El formato del correo electrónico no es válido")
-    @NotBlank(message = "El correo electrónico es obligatorio")
+    @Email @NotBlank
     private String clientEmail;
 
-    @NotNull(message = "Debes asignar un servicio a la cita")
     @ManyToOne
     @JoinColumn(name = "service_id")
     private ServiceEntity service;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }
