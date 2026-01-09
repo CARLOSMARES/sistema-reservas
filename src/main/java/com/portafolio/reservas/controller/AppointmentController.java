@@ -2,6 +2,9 @@ package com.portafolio.reservas.controller;
 
 import com.portafolio.reservas.model.Appointment;
 import com.portafolio.reservas.service.AppointmentService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +25,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> agendar(@RequestBody Appointment appointment) {
+    public ResponseEntity<?> agendar(@Valid @RequestBody Appointment appointment) {
         try {
             Appointment nuevaCita = appointmentService.agendarCita(appointment);
             return ResponseEntity.ok(nuevaCita);
